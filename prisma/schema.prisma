@@ -7,18 +7,61 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum IncomeSource {
+  SALARY
+  BUSINESS
+  INVESTMENTS
+  RENTAL
+  FREELANCE
+  DIVIDENDS
+  GIFTS
+  OTHER
+}
+
+enum ExpenseCategory {
+  GROCERIES
+  RENT
+  UTILITIES
+  TRANSPORTATION
+  ENTERTAINMENT
+  HEALTHCARE
+  EDUCATION
+  INSURANCE
+  DINING_OUT
+  TRAVEL
+  CLOTHING
+  PERSONAL_CARE
+  DEBT_PAYMENT
+  SAVINGS
+  OTHER
+}
+
 model User {
-  id Int @default(uuid())
+  id String @id @default(uuid())
   name String
   email String @unique
+  income Income[]
+  expanses Expenses[]
 }
 
 model Income {
-  id Int @default(uuid())
-
+  id String @id @default(uuid())
+  amount Float
+  title String
+  description String?
+  date DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  category IncomeSource?
 }
 
 model Expenses {
-  id Int @default(uuid())
-
+  id String @id @default(uuid())
+  amount Float
+  title String
+  description String?
+  date DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  category ExpenseCategory?
 }
